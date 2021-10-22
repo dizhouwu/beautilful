@@ -1,3 +1,4 @@
+import cProfile
 import functools
 import time
 
@@ -12,3 +13,14 @@ def timer(func):
         return value
 
     return wrapper_timer
+
+def profileit(func):
+    @functools.wraps(func)  
+    def wrapper(*args, **kwargs):
+        datafn = func.__qualname__ + ".profile" 
+        prof = cProfile.Profile()
+        retval = prof.runcall(func, *args, **kwargs)
+        prof.dump_stats(datafn)
+        return retval
+
+    return wrapper
