@@ -5,7 +5,7 @@ from paramiko import SFTPClient, Transport
 from contextlib import contextmanager
 
 
-class FTPClient:
+class SFTPClient:
     def __init__(self, host, password, username, port=22):
         self.host = host
         self.port = port
