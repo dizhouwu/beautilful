@@ -2,17 +2,29 @@ import cProfile
 import functools
 import time
 
-def timer(func):
-    @functools.wraps(func)
-    def wrapper_timer(*args, **kwargs):
-        tic = time.perf_counter()
-        value = func(*args, **kwargs)
-        toc = time.perf_counter()
-        elapsed_time = toc - tic
-        print(f"Func {func.__qualname__} Elapsed time: {elapsed_time:0.4f} seconds")
-        return value
+import logging
+import time
 
-    return wrapper_timer
+
+def timer(logger, level=None):
+    if level is None:
+        level = logging.INFO
+
+    def decorator(func):
+        @functools.wraps(func)
+        def inner(*args, **kwargs):
+            start = time.monotonic()
+            result = func(*args, **kwargs)
+            elapsed_time = time.monotonic() - start
+            logger.log(level, f"Func {func.__qualname__} Elapsed time: {elapsed_time:0.4f} seconds")
+            return result
+
+        return inner
+
+    return decorator
+
+
+
 
 def profileit(func):
     @functools.wraps(func)  
