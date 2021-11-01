@@ -11,4 +11,4 @@ async def get_from_websockets():
   
   
 if __name__ == '__main__':
-    asyncio.run(get_from_websockets)
+    asyncio.run(get_from_websockets())
