@@ -1,11 +1,25 @@
 import logging
 import datetime
+import os
 from paramiko import SFTPClient, Transport
 from contextlib import contextmanager
 
+from stat import S_ISDIR, S_ISREG    
 
+def sftp_get_recursive(path, dest, sftp):
+    item_list = sftp.listdir_attr(path)
+    dest = str(dest)
+    if not os.path.isdir(dest):
+        os.makedirs(dest, exist_ok=True)
+    for item in item_list:
+        mode = item.st_mode
+        if S_ISDIR(mode):
+            sftp_get_recursive(path + "/" + item.filename, dest + "/" + item.filename, sftp)
+        else:
+            sftp.get(path + "/" + item.filename, dest + "/" + item.filename)
+            
 class SSHFTPClient:
-    def __init__(self, *, host='', password='', username='', port=22):
+    def __init__(self, *, host="", password="", username="", port=22):
         self.host = host
         self.port = port
         self.password = password
