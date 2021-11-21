@@ -1,5 +1,3 @@
-import logging
-import datetime
 import os
 from paramiko import SFTPClient, Transport
 from contextlib import contextmanager
