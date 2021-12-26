@@ -36,3 +36,17 @@ def profileit(func):
         return retval
 
     return wrapper
+
+from contextlib import contextmanager
+@contextmanager
+def time_out(seconds):
+    class TimeOutException(Exception): pass
+    def signal_handler(signum, frame):
+        raise TimeOutException
+
+    signal.signal(signal.SIGALRM, signal_handler)
+    signal.alarm(seconds)
+    try:
+        yield
+    finally:
+        signal.alarm(0)
