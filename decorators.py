@@ -24,8 +24,6 @@ def timer(logger, level=None):
     return decorator
 
 
-
-
 def profileit(func):
     @functools.wraps(func)  
     def wrapper(*args, **kwargs):
@@ -50,3 +48,52 @@ def time_out(seconds):
         yield
     finally:
         signal.alarm(0)
+
+        
+import functools
+def decorator(func=None,deco_arg='default'):
+    if not callable(func):
+        return functools.partial(decorator,deco_arg=deco_arg)
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        print("deco_arg: ",deco_arg)
+        schema = kwargs.get("schema")
+        print("schema: ",schema)
+        return func(*args, **kwargs)
+
+    return wrapper
+
+class A:
+
+    @decorator(deco_arg="deco_arg1")
+    def bar1(self,*, schema=None):
+        pass
+    
+    @decorator(deco_arg="deco_arg2")
+    def bar2(self,*, schema=None):
+        pass
+    
+    @decorator
+    def bar3(self,*, schema=None):
+        pass
+
+print(A().bar1(schema='schema1'))
+print('-'*10)
+print(A().bar2(schema='schema2'))
+print('-'*10)
+print(A().bar3(schema='schema3'))
+"""
+output:
+    deco_arg:  deco_arg1
+    schema:  schema1
+    None
+    ----------
+    deco_arg:  deco_arg2
+    schema:  schema2
+    None
+    ----------
+    deco_arg:  default
+    schema:  schema3
+    None
+"""
