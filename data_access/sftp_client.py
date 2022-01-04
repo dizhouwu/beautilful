@@ -38,3 +38,14 @@ class SSHFTPClient:
         transport.connect(username=self.username, password=self.password)
         conn = SFTPClient.from_transport(transport)
         return conn
+
+# SSH Client
+import paramiko
+ssh = paramiko.SSHClient()
+from paramiko.rsakey import RSAKey
+
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+pkey = paramiko.RSAKey.from_private_key_file("host_keys-cert.pub")
+ssh.connect(host,username=username,pkey=pkey)
+sftp = ssh.open_sftp()
+sftp.listdir()
