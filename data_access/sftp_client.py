@@ -5,16 +5,23 @@ from contextlib import contextmanager
 from stat import S_ISDIR, S_ISREG    
 
 def sftp_get_recursive(path, dest, sftp):
+    if path in ():
+        return 
     item_list = sftp.listdir_attr(path)
-    dest = str(dest)
     if not os.path.isdir(dest):
         os.makedirs(dest, exist_ok=True)
     for item in item_list:
         mode = item.st_mode
         if S_ISDIR(mode):
-            sftp_get_recursive(path + "/" + item.filename, dest + "/" + item.filename, sftp)
+            try:
+                sftp_get_recursive(path + "/" + item.filename, dest + "/" + item.filename, sftp)
+            except:
+                print(f"Cannot access {item.filename}")
         else:
-            sftp.get(path + "/" + item.filename, dest + "/" + item.filename)
+            if 'csv' in item.filename:
+                print(item.filename)
+                # sftp.get(path + "/" + item.filename, dest + "/" + item.filename)
+
             
 class SSHFTPClient:
     def __init__(self, *, host="", password="", username="", port=22):
