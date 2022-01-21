@@ -35,8 +35,7 @@ with tempfile.TemporaryDirectory(dir=TMP_DIR) as tmpdirname:
     try:
         local_repo.git.commit("-m", commit_message)
         local_repo.git.push("--set-upstream", local_repo.remote().name, "master")
-        logger.info("Pushing modified config yaml to remote origin..")
     except GitCommandError as e:
         logger.error(str(e))
 
-    logger.info("Done..")
+    logger.info("Done")
