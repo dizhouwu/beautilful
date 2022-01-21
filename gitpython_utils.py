@@ -2,7 +2,7 @@ from git import Repo, Git, GitCommandError
 import os
 import tempfile
 
-SSH_REPO_PATH_ = ""
+SSH_REPO_PATH = ""
 TMP_DIR = "/tmp"
 SSH_KEY_FILE_NAME = "id_rsa"
 
@@ -23,7 +23,7 @@ with tempfile.TemporaryDirectory(dir=TMP_DIR) as tmpdirname:
     git_ssh_cmd = f"ssh -i {git_ssh_identity_file}"
 
     local_repo = Repo.clone_from(
-        SSH_REPO_PATH_,
+        SSH_REPO_PATH,
         git_work_dir,
         branch="master",
         env={"GIT_SSH_COMMAND": git_ssh_cmd},
