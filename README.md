@@ -9,6 +9,7 @@ Python 3.9 (for type hint, functools.cache)
 ## Test
 
 Doctest inline
+Run "python build_wall.py" to verify test sucesss. You would see "Process finished with exit code 0" on Pycharm
 
 ## Usage
 
